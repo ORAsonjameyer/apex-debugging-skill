@@ -2,6 +2,8 @@
 
 This repository contains the `workspace` Agent Skill for Oracle APEX administration workflows. It provides operational guardrails, routing guidance, references, and deterministic read-only helpers for APEX workspace and instance administration.
 
+It works wonderful together with the `apexlang skills` nd the `db skills`!
+
 ## What It Provides
 
 - Workspace lifecycle planning, inventory, verification, schema mapping, user administration, recovery, and removal safeguards.
