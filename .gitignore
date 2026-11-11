@@ -1,3 +1,11 @@
 # Local agent context and orchestration; do not publish.
-.agents/
+# will be published due to more content: .agents/
+
+# workdir is provided for testing purposes
 workdir/
+
+# logfiles are individual to user
+.logs/
+
+# other not needed files
+.DS_Store
