@@ -15,12 +15,12 @@ The original APEXlang skill is the designated skill for APEX application source,
 <table>
   <tr>
     <td width="42%" valign="top">
-      <a href="docs/apex-workspace-application-triage-v8.png"><img src="docs/apex-workspace-application-triage-v8.png" alt="APEX Application &amp; Workspace Triage Cheat Sheet V8" width="420"></a>
+      <a href="docs/apex-workspace-application-triage-v14.png"><img src="docs/apex-workspace-application-triage-v14.png" alt="APEX Application &amp; Workspace Triage Cheat Sheet V14" width="420"></a>
     </td>
     <td width="58%" valign="top">
       <ul>
         <li>Live APEX application browser debugging in an already-signed-in browser session: reproduce runtime behavior, inspect visible errors, available console messages, and redacted request metadata. Application source/component diagnosis and APEX Debug/Trace analysis stay in APEXlang.</li>
-        <li>Guided MLE ORA-01031 diagnosis and authorized minimal repair via SQLcl MCP: prefer the DB skill; if unavailable, use the bundled fallback for MLE creation privileges only.</li>
+        <li>Guided diagnosis and authorized fixes: classify symptoms, verify context, and route application and database work to the appropriate skills. A narrow MLE creation privilege fallback is available when the DB skill is unavailable.</li>
         <li>Workspace lifecycle planning, inventory, verification, approved schema mappings, APEX user administration, recovery, and removal safeguards.</li>
         <li>Workspace dashboards and Monitor Activity, workspace service settings and requests, activity trends, active-session inventory, login attempts, file utilization, and Workspace health checks.</li>
         <li>Workspace administration UI checks and Workspace-scoped AI token-limit checks for supported APEX environments.</li>
@@ -32,7 +32,7 @@ The original APEXlang skill is the designated skill for APEX application source,
   </tr>
 </table>
 
-[Read the accessible text version](docs/apex-workspace-application-triage-v8.md), including the [MLE grant debugging case](apex/workspace-debugging/application/mle-grant-debug.md) and its [SQLcl MCP fallback](apex/workspace-debugging/application/mle-privilege-fallback.md).
+[Read the accessible text version](docs/apex-workspace-application-triage-v14.md), including the [MLE grant debugging case](apex/workspace-debugging/application/mle-grant-debug.md) and its [SQLcl MCP fallback](apex/workspace-debugging/application/mle-privilege-fallback.md).
 
 ## Scope Boundaries
 
@@ -122,6 +122,40 @@ Load only the routed reference needed for the current task. Do not treat this RE
 
 ### Debugging Demo 1: MLE Modules Debugging
 
+<a href="docs/demo-1-mle-grants.png"><img src="docs/demo-1-mle-grants.png" alt="Demo 1: ORA-01031 bei der MLE-Ausführung" width="320"></a>
+
+
+
+**Fehlerfall simulieren:** In einer isolierten Entwicklungsumgebung können die
+folgenden Rechte vor der Demo entzogen werden. Die Befehle betreffen das gesamte
+Schema `ORACLE`; sie setzen voraus, dass die Rechte direkt an dieses Schema
+vergeben wurden. Abweichende Schema-Namen und über Rollen vergebene Rechte sind
+gesondert zu prüfen. Das Entziehen dieser Rechte allein garantiert keinen
+`ORA-01031` beim Erstellen eines MLE-Moduls; die tatsächlich benötigten und
+wirksamen Rechte hängen von der ausführenden Identität und dem Vorgang ab.
+
+**Direkte Systemprivilegien prüfen:**
+<pre style="font-size: 70%"><code>
+-- Direkte Systemprivilegien für ORACLE
+SELECT username, privilege, admin_option
+FROM   user_sys_privs
+WHERE  privilege IN ('CREATE MLE', 'EXECUTE DYNAMIC MLE')
+ORDER BY privilege;
+
+-- Als SYS AS SYSDBA ausführen
+REVOKE EXECUTE DYNAMIC MLE FROM ORACLE;
+REVOKE EXECUTE ON JAVASCRIPT FROM ORACLE;
+
+-- Als entsprechend berechtigter Datenbankadministrator ausführen
+GRANT EXECUTE DYNAMIC MLE TO ORACLE;
+GRANT EXECUTE ON JAVASCRIPT TO ORACLE;
+</code></pre>
+
+`EXECUTE DYNAMIC MLE` ist für dynamische MLE-Ausführung erforderlich; für das
+Erstellen eines MLE-Moduls ist unter anderem `CREATE MLE` relevant. Welche
+Rechte konkret fehlen, hängt vom Vorgang und der ausführenden Identität ab.
+Siehe [Oracle-Dokumentation zu MLE-Rechten](https://docs.oracle.com/en/database/oracle/oracle-database/26/adfns/application-architecture.html).
+
 **Vorbereitung:** Öffne im integrierten VS-Code-Browser den APEX App Builder und
 die Install Summary von App 100. Bleibe auf der Seite stehen, auf der das Skript
 `MLE objects` mit dem Fehler `ORA-01031` angezeigt wird. Starte den Prompt,
@@ -142,16 +176,18 @@ wiederhole die Installation der Supporting Objects im APEX-Fenster und prüfe
 das Ergebnis. Schreibe ein redigiertes Protokoll nach .logs.
 ```
 
-### Debugging Demo 2: Garmin App – JSON.WRITER.CLOSE_OBJECT
+### Debugging Demo 2: Laufstatistik – JSON.WRITER.CLOSE_OBJECT
 
-**Vorbereitung:** Öffne die Garmin-App 106 im integrierten VS-Code-Browser und
-rufe Seite 1 auf. Bleibe bei der angezeigten Fehlermeldung stehen und starte
+<a href="docs/demo-2-table-missing.png"><img src="docs/demo-2-table-missing.png" alt="Demo 2: Fehler in der Laufstatistik" width="320"></a>
+
+**Vorbereitung:** Importiere die vorbereitete Seite 302 in App 107 und öffne sie
+im integrierten VS-Code-Browser. Bleibe beim sichtbaren Fehler stehen und starte
 von dort den Prompt. Für die Demo muss die vorbereitete fehlerhafte Abfrage in
 der installierten App vorhanden sein. Der Prompt verrät die Ursache nicht.
 
 ```text
 Nutze den Workspace-Debugging-Skill und beginne beim angezeigten Fehler der
-Garmin-App 106 auf Seite 1 im geöffneten VS-Code-Browser. Frage mich zuerst
+App 107 auf Seite 302 im geöffneten VS-Code-Browser. Frage mich zuerst
 über die Auswahl nach der Umgebung: lokale Entwicklung, Test oder Produktion.
 
 Debugge die laufende Anwendung live. Untersuche die sichtbare Fehlermeldung
@@ -169,6 +205,8 @@ Schreibe ein redigiertes Protokoll nach .logs.
 
 ### Debugging Demo 3: APEX Debug Bench – Dynamic Action
 
+<a href="docs/demo-3-dynamic-action.png"><img src="docs/demo-3-dynamic-action.png" alt="Demo 3: Dynamic Action in APEX Debug Bench" width="320"></a>
+
 ```text
 Nutze den Workspace-Debugging-Skill und beginne bei der geöffneten APEX Debug Bench App 107
 im VS-Code-Browser. Frage mich zuerst über die Auswahl nach der Umgebung: lokale
@@ -182,6 +220,12 @@ Berichte den Befund und schlage die kleinste passende Behebung vor. Warte auf
 meine Freigabe, bevor du etwas änderst. Behebe danach die bestätigte Ursache,
 wiederhole den betroffenen Ablauf im APEX-Fenster und prüfe das Ergebnis.
 Schreibe ein redigiertes Protokoll nach .logs.
+```
+
+### Debugging Demo 4: APEX Benchmark Live Run
+Open http://127.0.0.1:28443 in your browser. This non-production playground uses ChangeMe_VSCode_12345 for all logins.
+```text
+Ich bin nun auf der page 3 für den automatischen Benchmark Test. kannst du jetzt die applikation durchlaufen für die 3 usecases pro modell aus der Tabelle, auch bitte in der Reihenfolge, und diese jeweils als live browser asuführung bzw. meinen VSCode nutzen zur Umschaltung der modelle. die Fehler dürfen nicht gefixt werden, sondern sie sollen nur festgestellt werden und dann zum nächste testcase.
 ```
 
 # IMPORTANT TO READ
