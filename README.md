@@ -15,12 +15,12 @@ The original APEXlang skill is the designated skill for APEX application source,
 <table>
   <tr>
     <td width="42%" valign="top">
-      <a href="docs/apex-workspace-application-triage-v14.png"><img src="docs/apex-workspace-application-triage-v14.png" alt="APEX Application &amp; Workspace Triage Cheat Sheet V14" width="420"></a>
+      <a href="docs/apex-workspace-application-triage-v15.png"><img src="docs/apex-workspace-application-triage-v15.png" alt="APEX Application &amp; Workspace Triage Cheat Sheet V15" width="420"></a>
     </td>
     <td width="58%" valign="top">
       <ul>
         <li>Live APEX application browser debugging in an already-signed-in browser session: reproduce runtime behavior, inspect visible errors, available console messages, and redacted request metadata. Application source/component diagnosis and APEX Debug/Trace analysis stay in APEXlang.</li>
-        <li>Guided diagnosis and authorized fixes: classify symptoms, verify context, and route application and database work to the appropriate skills. A narrow MLE creation privilege fallback is available when the DB skill is unavailable.</li>
+        <li>Guided diagnosis and authorized fixes: use local cases and collaborate with APEXlang or DB as needed. Begin MLE privilege checks with the selected Workspace schema user; use an administrative connection later when needed. A narrow MLE creation fallback is available when DB is unavailable.</li>
         <li>Workspace lifecycle planning, inventory, verification, approved schema mappings, APEX user administration, recovery, and removal safeguards.</li>
         <li>Workspace dashboards and Monitor Activity, workspace service settings and requests, activity trends, active-session inventory, login attempts, file utilization, and Workspace health checks.</li>
         <li>Workspace administration UI checks and Workspace-scoped AI token-limit checks for supported APEX environments.</li>
@@ -32,7 +32,7 @@ The original APEXlang skill is the designated skill for APEX application source,
   </tr>
 </table>
 
-[Read the accessible text version](docs/apex-workspace-application-triage-v14.md), including the [MLE grant debugging case](apex/workspace-debugging/application/mle-grant-debug.md) and its [SQLcl MCP fallback](apex/workspace-debugging/application/mle-privilege-fallback.md).
+[Read the accessible text version](docs/apex-workspace-application-triage-v15.md), including the [MLE grant debugging case](apex/workspace-debugging/application/mle-grant-debug.md) and its [SQLcl MCP fallback](apex/workspace-debugging/application/mle-privilege-fallback.md).
 
 ## Scope Boundaries
 
@@ -162,18 +162,19 @@ die Install Summary von App 100. Bleibe auf der Seite stehen, auf der das Skript
 bevor du die Installation erneut ausführst oder die Rechte änderst.
 
 ```text
-Nutze den Workspace-Debugging-Skill und beginne beim angezeigten Fehler von APEX App 100
-im geöffneten VS-Code-Browser. Frage mich zuerst über die Auswahl nach der
-Umgebung: lokale Entwicklung, Test oder Produktion.
 
-Debugge anschließend live und ermittle mit dem DB-Skill über SQLcl-MCP zunächst
-lesend die tatsächliche DDL-Identität und deren benötigte MLE-Rechte. Nutze
-keinen SQL Workshop.
+Nutze den Workspace-Debugging-Skill und beginne beim sichtbaren ORA-01031
+auf Seite 301 der APEX App 107 im VS-Code-Browser. Frage mich zuerst per
+Auswahl nach der Umgebung: lokale Entwicklung, Test oder Produktion.
 
-Berichte den Befund und den kleinsten nötigen Grant-Vorschlag. Warte auf meine
-Freigabe, bevor du etwas änderst. Behebe danach die Ursache über SQLcl-MCP,
-wiederhole die Installation der Supporting Objects im APEX-Fenster und prüfe
-das Ergebnis. Schreibe ein redigiertes Protokoll nach .logs.
+Debugge live und prüfe mit dem DB-Skill über SQLcl-MCP lesend den
+Ausführungskontext und die benötigten MLE-Rechte. Frage bei Bedarf nach
+einer administrativen Verbindung. Nutze keinen SQL Workshop.
+
+Berichte den Befund und den kleinsten begründeten Lösungsvorschlag.
+Führe keine Änderungen aus und warte auf meine Freigabe. Schreibe ein
+redigiertes Protokoll nach .logs.
+
 ```
 
 ### Debugging Demo 2: Laufstatistik – JSON.WRITER.CLOSE_OBJECT

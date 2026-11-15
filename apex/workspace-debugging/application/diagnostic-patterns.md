@@ -1,6 +1,6 @@
 # APEX Diagnostic Patterns
 
-Use the matching pattern as a hypothesis, not as a diagnosis. First record the visible symptom, affected request and target; distinguish observed facts from inferred causes. Capture only redacted evidence allowed by [live-browser-debugging.md](../references/diagnostics/live-browser-debugging.md). Source, component, Debug/Trace, application import and repair belong to APEXlang; general database and privilege investigation belongs to the DB skill. If a companion skill is unavailable, respect the limits in [SKILL.md](SKILL.md); only the separately documented MLE creation fallback is available for the relevant `ORA-01031` case.
+Use the matching pattern as a hypothesis, not as a diagnosis. First record the visible symptom, affected request and target; distinguish observed facts from inferred causes. Capture only redacted evidence allowed by [live-browser-debugging.md](../references/diagnostics/live-browser-debugging.md). Perform the permitted local observation and checks first and continue them alongside targeted handoffs where useful. Source, component, Debug/Trace, application import and repair belong to APEXlang; general database and privilege investigation belongs to the DB skill. Hand off only the work that needs the other skill and carry forward the relevant evidence. If a companion skill is unavailable, respect the limits in [SKILL.md](SKILL.md); only the separately documented MLE creation fallback is available for the relevant `ORA-01031` case.
 
 ## Page Items and Dynamic Actions
 

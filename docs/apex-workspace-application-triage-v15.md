@@ -1,6 +1,6 @@
-# APEX Application & Workspace Triage — Cheat Sheet V11
+# APEX Application & Workspace Triage — Cheat Sheet V15
 
-Visual one-pager: [PNG](apex-workspace-application-triage-v11.png). Operational details: [Application triage](../apex/workspace-debugging/application/SKILL.md), [MLE grant debugging](../apex/workspace-debugging/application/mle-grant-debug.md), and the [SQLcl MCP fallback](../apex/workspace-debugging/application/mle-privilege-fallback.md).
+Visual one-pager: [PNG](apex-workspace-application-triage-v15.png). Operational details: [Application triage](../apex/workspace-debugging/application/SKILL.md), [MLE grant debugging](../apex/workspace-debugging/application/mle-grant-debug.md), and the [SQLcl MCP fallback](../apex/workspace-debugging/application/mle-privilege-fallback.md).
 
 **Live application debugging and Workspace administration.** Application source and APEX Debug/Trace belong to the original APEXlang skill; general database privileges, grants, SQL, and ORDS belong to the DB skill. A narrow MLE creation privilege fallback is included when the DB skill is unavailable.
 
@@ -9,8 +9,12 @@ Visual one-pager: [PNG](apex-workspace-application-triage-v11.png). Operational 
 ## Application and Live Debugging
 
 - **Live browser:** use the existing signed-in APEX session, including a browser embedded in VS Code; observe the visible UI, available console, and redacted request metadata.
-- **Application symptoms:** classify page, submit, AJAX, JavaScript, REST, performance, or access issues and hand source/component or APEX Debug/Trace work to APEXlang.
+- **Local cases first:** apply the matching documented Workspace or browser diagnosis directly. Continue permitted checks and verification while collaborating with APEXlang or DB on the specific work they own.
+- **Application symptoms:** classify page, session-state, Dynamic Action, chart, SQL/privilege, MLE, checksum and import issues; consult [diagnostic patterns](../apex/workspace-debugging/application/diagnostic-patterns.md) and route deeper work to APEXlang or DB.
+- **Builder/runtime mismatch:** compare the same workspace, application, page and working-copy context; route page, region, and template-reference checks and any justified reimport to APEXlang.
 - **Guided diagnostics:** identify the failing layer, verify the target and identity, and collect the smallest useful evidence before routing to the owning skill.
+- **Privilege diagnosis:** identify the operation and execution context, then collaborate with DB on the relevant checks and authorized repair.
+- **Application diagnosis identity:** begin database checks with the selected Workspace schema user; use an administrative connection later for necessary privilege checks or authorized repair.
 - **Authorized repair:** describe the proposed change, follow the user’s authorization, then verify the result.
 - **Guided choices:** when not already known, use the available question picker for environment (`Lokale Entwicklung`, `Test`, `Produktion`) and for actual discovered database connections. Reuse prior answers and honor the connector's active-connection switch rule. If the exact grant is known and not prohibited, one picker can combine connection selection with explicit approval of that grant.
 
@@ -26,7 +30,7 @@ Visual one-pager: [PNG](apex-workspace-application-triage-v11.png). Operational 
 | --- | --- | --- |
 | Application source/components, APEXlang definitions, APEX Debug/Trace, imports, validation, locks, working copies, and application changes | Preferred owner for database accounts/schemas/privileges, MLE checks and grants, SQL, database performance, ORDS, network ACLs, and infrastructure | Live browser observation, symptom routing, Workspace accounts, settings, dashboards, reports and health; limited MLE creation privilege fallback if DB skill unavailable |
 
-The Workspace skill prefers the DB handoff. When the DB skill cannot be found, its local fallback checks MLE creation privileges and can apply the verified minimal grant if authorized; it does not cover general SQL, `ANY` grants, dynamic MLE execution, or database administration. An explicit request for the relevant application or DB diagnosis or repair authorizes its handoff; the chosen connection and its tool rules still apply. A visible MLE error does not require APEXlang to be active before the privilege check begins.
+Start with the local case and bring in DB or APEXlang for the specific work their domains own; continue independent local checks alongside them. When the DB skill cannot be found, the local fallback checks MLE creation privileges and can apply the verified minimal grant if authorized; it does not cover general SQL, `ANY` grants, dynamic MLE execution, or database administration. An explicit request for the relevant application or DB diagnosis or repair authorizes its handoff; the chosen connection and its tool rules still apply. A visible identified MLE creation or execution error does not require APEXlang or Debug/Trace before privilege checks. An absent grant alone does not establish the cause or the runtime identity.
 
 ## Safety and Evidence
 

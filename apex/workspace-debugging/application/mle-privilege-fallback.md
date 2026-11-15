@@ -4,7 +4,7 @@ Use this narrow fallback only when the DB skill cannot be found and the reported
 
 ## Connection and identity
 
-1. Use SQLcl MCP, not APEX SQL Workshop. Discover saved connections if needed and let the user select the relevant connection with the question picker. If a connection is already active, follow the MCP tool's rule to ask before switching. Do not guess an alias, accept a preselected option as an answer, request passwords, or assume that an APEX browser session is a database login.
+1. Use SQLcl MCP, not APEX SQL Workshop. Start with the user-selected relevant Workspace schema database connection; do not start live diagnosis as SYSTEM, SYS, or another administrative user. Discover saved connections if needed and let the user select with the question picker. Use a user-selected administrator only after initial schema-user checks when further privilege inspection or an authorized repair requires it. If a connection is already active, follow the MCP tool's rule to ask before switching. Do not guess an alias, accept a preselected option as an answer, request passwords, or assume that an APEX browser session is a database login.
 2. Immediately after connecting, follow the connector's required schema-information step with brief output and a narrowly scoped object-name filter. Check `SESSION_USER`, `CURRENT_USER`, `CURRENT_SCHEMA`, `ISDBA`, PDB and service. Verify that the selected development/test/production target and the application target match. Treat the application parsing schema, DDL execution identity, module owner and administrative connection as separate facts. Do not use `SYS` or `SYSDBA` for this fallback; a user-selected `SYSTEM` connection without `SYSDBA` can be used for database privilege work after verifying its PDB. This does not authorize Workspace administration APIs under `SYSTEM`.
 3. Establish the relevant application schema and privilege-check identity from reliable installed-app evidence and, when needed, the user's explicit confirmation. If the recipient, PDB or execution context is unresolved, report the uncertainty and stop before granting. Ownership of an unrelated table or the name of an MCP connection is not proof of the historical DDL identity.
 
@@ -24,7 +24,9 @@ SQLcl MCP may write its own SQL audit records. Do not log credentials, session i
 
 ## Read-only privilege checks
 
-Use only the checks needed for the failing operation and installed release. First discover whether the database has the relevant privilege name:
+Begin by checking all three MLE rights named in [mle-grant-debug.md](mle-grant-debug.md) as the relevant non-administrative schema user, including the `ALL_TAB_PRIVS` check for `SYS.JAVASCRIPT`. Classify each as present, absent, or unknown in the applicable context. Determine the rights needed for the actual creation operation and installed release before proposing a grant. The fallback's repair scope remains limited to the creation case described below.
+
+Also discover whether the database has the relevant privilege names:
 
 ```sql
 SELECT name
