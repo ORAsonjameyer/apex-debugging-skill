@@ -1,6 +1,6 @@
 ---
 name: workspace-debugging
-description: Oracle APEX Workspace administration, monitoring, and live browser triage. Diagnose MLE ORA-01031 with the DB skill or a narrow SQLcl MCP fallback; route application source and APEX Debug/Trace to APEXlang.
+description: Oracle APEX Workspace administration, monitoring, live browser triage, and redacted support-case drafts. Diagnose MLE ORA-01031 with the DB skill or a narrow SQLcl MCP fallback; route application source and APEX Debug/Trace to APEXlang.
 ---
 
 # Oracle APEX Workspace & Debugging
@@ -20,6 +20,7 @@ Prefer the original APEXlang and DB skills for their respective application and 
 - Workspace dashboards, Monitor Activity, active sessions, and browser-based Workspace administration checks: start with `references/diagnostics/workspace-diagnostics.md` or `references/monitoring/workspace-monitor-activity.md`.
 - Broad APEX Workspace status: use `references/monitoring/environment-healthcheck.md`.
 - Live reproduction and browser-level investigation of an APEX application: use `references/diagnostics/live-browser-debugging.md`.
+- A user-requested support case or escalation summary from an existing investigation: use `references/diagnostics/support-case-handoff.md`. Prepare a redacted draft for review; do not submit it automatically.
 - Application symptom classification and bounded handoffs to APEXlang or DB: use `application/SKILL.md`; it reuses the existing Workspace monitoring and live-browser references. For a visible MLE-related `ORA-01031`, including runtime execution, start with `application/mle-grant-debug.md` and the DB skill; the local SQLcl MCP fallback remains limited to MLE creation if the DB skill is unavailable.
 - Workspace-level activity trends and Workspace administration reports: use the matching reference in `references/monitoring/`.
 - Use the original APEXlang skill for application source/exports, component definitions and code-level behavior, `APEX_DEBUG_MESSAGES`, APEX Debug/Trace configuration and interpretation, import, validation, and application locking/working-copy workflows. APEX 26.2 file-level import and the `APEX_APPLICATION_ADMIN` lock/working-copy APIs are application tasks for APEXlang, even when used within a Workspace.
@@ -84,6 +85,7 @@ For live application browser triage, follow `references/diagnostics/live-browser
 - Static review of Workspace reports or screenshots does not need database access. State that boundary before starting.
 - For customer-specific Workspace checks, ask once whether the relevant Monitor Activity, dashboard, Manage Service, active-session, or Workspace administration UI evidence is available. Route source/component analysis and APEX Debug/Trace evidence to APEXlang; route database/ORDS evidence to the DB skill. Live browser triage follows its dedicated reference.
 - Report in chat by default unless the user requests a file or the selected workflow requires a protocol. Reuse an explicitly selected output location without asking again. Before writing a customer-specific report without a selected path, obtain the output directory or exact path. Downloads is available after a fresh `Ja` confirmation; this confirms only the output location.
+- For each distinct execution, use one new redacted Markdown protocol, shared across its diagnosis, handoffs, approval, repair, and verification. Continue updating that same file when the execution resumes in a later turn; start a new file for a separate execution even for the same app or error. In a selected directory, name it `<short-scope>-YYYYMMDD-HHMMSS.md` using local start time; record the timezone and avoid collisions without overwriting. Honor an explicitly requested exact filename. Do not merge historical executions or split a single execution across multiple protocol files.
 - Before substantive live Workspace administration, state changes, or Workspace report review, read `references/diagnostics/workspace-protocol.md` and create/update the local protocol outside this skill tree. Confirm its output directory or exact file path first.
 - Keep customer evidence, exports, reports, logs, screenshots, and protocols outside the skill tree and repository by default; honor an explicit user-selected location. Use redacted excerpts only; do not expose passwords, tokens, cookies, authorization headers, request bodies, item values, or unnecessary personal data.
 - Never create database tables, triggers, packages, or other objects for Workspace protocols, logging, or instrumentation.

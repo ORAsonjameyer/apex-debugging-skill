@@ -4,11 +4,11 @@ Use this reference before substantive live Workspace administration, Workspace r
 
 ## Location
 
-Create or update a local Markdown protocol outside the skill tree before the workflow starts. Do not create database tables or other database objects for protocol storage.
+Create one local Markdown protocol per execution outside the skill tree before the workflow starts. Update that file through the entire execution, including later turns and handoffs; do not append a separate execution to it. Do not create database tables or other database objects for protocol storage.
 
-Do not write protocol files into `workspace/`, `references/`, `tools/`, tests, committed documentation, or another repository path unless the user explicitly asks for a sanitized generic skill artifact.
+Do not write protocol files into `workspace/`, `references/`, `tools/`, tests, or committed documentation. A user-selected repository output directory such as `.logs/` is allowed for redacted protocols.
 
-Ask for a user-confirmed output directory or exact Markdown path. The local operating-system Downloads folder is a valid location. If no path is provided, offer Downloads and continue only after a fresh `Ja` reply; this confirms the file location only. Use a timestamped filename such as `apex-workspace-protocol-YYYYMMDD-HHMMSS.md`.
+Reuse the user-selected output directory or exact Markdown path, or ask when none was provided. The local operating-system Downloads folder is a valid location. If no path is provided, offer Downloads and continue only after a fresh `Ja` reply; this confirms the file location only. In a selected directory use a timestamped filename such as `apex-workspace-protocol-YYYYMMDD-HHMMSS.md` with local start time and timezone in the content; avoid overwriting on collisions. Honor an explicitly requested exact filename.
 
 ## Required Content
 

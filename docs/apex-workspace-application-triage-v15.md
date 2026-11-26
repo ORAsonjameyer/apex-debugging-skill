@@ -1,50 +1,29 @@
-# APEX Application & Workspace Triage — Cheat Sheet V15
+# 🧭 APEX Application & Workspace Triage — V15
 
 Visual one-pager: [PNG](apex-workspace-application-triage-v15.png). Operational details: [Application triage](../apex/workspace-debugging/application/SKILL.md), [MLE grant debugging](../apex/workspace-debugging/application/mle-grant-debug.md), and the [SQLcl MCP fallback](../apex/workspace-debugging/application/mle-privilege-fallback.md).
 
-**Live application debugging and Workspace administration.** Application source and APEX Debug/Trace belong to the original APEXlang skill; general database privileges, grants, SQL, and ORDS belong to the DB skill. A narrow MLE creation privilege fallback is included when the DB skill is unavailable.
+## 🔎 Live triage
 
-**Recommendation:** Prefer APEXlang and the DB skill for their respective domains. If either is unavailable, continue with the local browser-triage and MLE-fallback capabilities where applicable, and state what remains outside their scope.
+- Confirm environment, workspace, application, and page.
+- Reproduce in the signed-in browser and record one redacted, timestamped protocol.
 
-## Application and Live Debugging
+## 🧪 Diagnose and verify
 
-- **Live browser:** use the existing signed-in APEX session, including a browser embedded in VS Code; observe the visible UI, available console, and redacted request metadata.
-- **Local cases first:** apply the matching documented Workspace or browser diagnosis directly. Continue permitted checks and verification while collaborating with APEXlang or DB on the specific work they own.
-- **Application symptoms:** classify page, session-state, Dynamic Action, chart, SQL/privilege, MLE, checksum and import issues; consult [diagnostic patterns](../apex/workspace-debugging/application/diagnostic-patterns.md) and route deeper work to APEXlang or DB.
-- **Builder/runtime mismatch:** compare the same workspace, application, page and working-copy context; route page, region, and template-reference checks and any justified reimport to APEXlang.
-- **Guided diagnostics:** identify the failing layer, verify the target and identity, and collect the smallest useful evidence before routing to the owning skill.
-- **Privilege diagnosis:** identify the operation and execution context, then collaborate with DB on the relevant checks and authorized repair.
-- **Application diagnosis identity:** begin database checks with the selected Workspace schema user; use an administrative connection later for necessary privilege checks or authorized repair.
-- **Authorized repair:** describe the proposed change, follow the user’s authorization, then verify the result.
-- **Guided choices:** when not already known, use the available question picker for environment (`Lokale Entwicklung`, `Test`, `Produktion`) and for actual discovered database connections. Reuse prior answers and honor the connector's active-connection switch rule. If the exact grant is known and not prohibited, one picker can combine connection selection with explicit approval of that grant.
+- Classify the failing layer and gather the minimum useful evidence.
+- Start with the selected Workspace identity.
+- Check permissions; apply authorized fixes and verify the result.
 
-## Workspace Activities
+## 🔀 Route by owner
 
-- **Administration:** lifecycle, APEX Workspace users/groups, approved schema mappings, resources, Manage Service settings, and service requests.
-- **Monitoring:** dashboards, Monitor Activity, login attempts, sessions, application-error presence, weighted page-performance reports, activity trends, and Workspace AI-service utilization.
-- **Health and tools:** Workspace health checks, the local planning helper, redacted protocol guidance, and version-aware checks of public APIs and views.
+- **APEXlang:** application source, components, Debug/Trace, and imports.
+- **DB:** SQL, grants and MLE, ORDS, and infrastructure.
+- **Workspace:** users, mappings, services, monitoring, and health.
+- **MLE fallback:** creation privilege only, when the DB skill is unavailable.
 
-## Route by Owner
+## 🛡️ Safety
 
-| Original APEXlang skill | DB skill | Debug Skill |
-| --- | --- | --- |
-| Application source/components, APEXlang definitions, APEX Debug/Trace, imports, validation, locks, working copies, and application changes | Preferred owner for database accounts/schemas/privileges, MLE checks and grants, SQL, database performance, ORDS, network ACLs, and infrastructure | Live browser observation, symptom routing, Workspace accounts, settings, dashboards, reports and health; limited MLE creation privilege fallback if DB skill unavailable |
+- A missing grant alone does not prove the cause; confirm runtime identity.
+- Protect credentials, sessions, payloads, and personal data.
+- Production changes require explicit authorization.
 
-Start with the local case and bring in DB or APEXlang for the specific work their domains own; continue independent local checks alongside them. When the DB skill cannot be found, the local fallback checks MLE creation privileges and can apply the verified minimal grant if authorized; it does not cover general SQL, `ANY` grants, dynamic MLE execution, or database administration. An explicit request for the relevant application or DB diagnosis or repair authorizes its handoff; the chosen connection and its tool rules still apply. A visible identified MLE creation or execution error does not require APEXlang or Debug/Trace before privilege checks. An absent grant alone does not establish the cause or the runtime identity.
-
-## Safety and Evidence
-
-- **Database access:** verify the target environment and identity before database work.
-- **Production changes:** require the user’s authorization for the specific change.
-
-- **Workspace API identity:** use a confirmed APEX administrator. Never use `SYS` or `SYSDBA`; `SYSTEM` is a narrowly scoped APEX-admin exception requiring a fresh exact uppercase `YES`. DB-owned privilege work follows the DB skill's rules; the MLE fallback may use a user-selected `SYSTEM` connection without `SYSDBA` after verifying its PDB.
-- **Workspace administration UI:** for test or production, require the separate fresh exact uppercase `YES` specified by the Workspace administration workflow before attaching.
-- **Live UI:** confirm the environment and read-only scope before test or production interaction. A structured environment choice that states the scope can provide this authorization. Use existing explicit authorization for subsequent actions; do not treat a read-only choice as permission to change data.
-- **Privacy:** do not expose passwords, cookies, tokens, session IDs, request/response bodies, item values, or unredacted HAR files. SQLcl MCP may audit executed statements.
-- **Evidence:** reuse the user's explicitly selected protocol path. Otherwise keep customer evidence outside the repository and ask for a path only when one is required.
-
-## APEX 26.2 Baseline
-
-As of **November 2, 2026**, Oracle lists APEX **26.2, 26.1, 24.2, and 24.1** as supported. APEX 23.2 support ended in May 2026. See [Oracle's APEX support table](https://www.oracle.com/apex/).
-
-APEX 26.2 file-level APEXlang import and application lock/working-copy APIs remain APEXlang workflows. Workspace-Level Network Access Control uses `WEBSERVICE_USE_SCHEMA_ACL`; instance configuration and database ACL work route to DB. See [APEX 26.2 New Features](https://docs.oracle.com/en/database/oracle/apex/26.2/htmrn/new-features.html).
+For version-specific API and view support, check the active APEX release.

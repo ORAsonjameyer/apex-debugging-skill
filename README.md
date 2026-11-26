@@ -10,12 +10,20 @@ The original APEXlang skill is the designated skill for APEX application source,
 
 **Recommendation:** Prefer the APEXlang and DB skills for their respective application and database workflows. If either skill is unavailable, continue with the capabilities included here: live browser triage and, for MLE creation `ORA-01031`, the narrow SQLcl MCP fallback. State any remaining work that those capabilities cannot cover.
 
+The APEXlang skill focuses on application development and also analyzes runtime
+errors and verifies UI behavior. The Workspace Debugging skill starts with a
+reported issue in a running app, reproduces it in the existing browser session,
+and collects redacted evidence. It involves the APEXlang skill for component or
+debug-log analysis and the DB skill for database analysis when needed. Both
+skills support browser-based runtime checks. See the [case comparison](#implemented-diagnostic-cases-and-skill-boundaries)
+for their boundaries.
+
 ## What It Provides
 
 <table>
   <tr>
     <td width="42%" valign="top">
-      <a href="docs/apex-workspace-application-triage-v15.png"><img src="docs/apex-workspace-application-triage-v15.png" alt="APEX Application &amp; Workspace Triage Cheat Sheet V15" width="420"></a>
+      <a href="docs/apex-workspace-application-triage-v16.png"><img src="docs/apex-workspace-application-triage-v16.png" alt="APEX Application &amp; Workspace Triage Cheat Sheet V16" width="420"></a>
     </td>
     <td width="58%" valign="top">
       <ul>
@@ -26,13 +34,14 @@ The original APEXlang skill is the designated skill for APEX application source,
         <li>Workspace administration UI checks and Workspace-scoped AI token-limit checks for supported APEX environments.</li>
         <li>Local protocol-file guidance for Workspace changes, administration checks, customer evidence, and live browser triage.</li>
         <li>Version-aware checks for supported APEX releases and runtime discovery of version-sensitive APIs, views, columns, and package signatures.</li>
+        <li>Reviewable, redacted support-case drafts from existing investigation evidence.</li>
       </ul>
       <p>The included workspace planner is an optional helper. It does not execute SQLcl, ORDS, generic database administration, or customer-specific workflows.</p>
     </td>
   </tr>
 </table>
 
-[Read the accessible text version](docs/apex-workspace-application-triage-v15.md), including the [MLE grant debugging case](apex/workspace-debugging/application/mle-grant-debug.md) and its [SQLcl MCP fallback](apex/workspace-debugging/application/mle-privilege-fallback.md).
+[Read the accessible text version](docs/apex-workspace-application-triage-v16.md), including the [MLE grant debugging case](apex/workspace-debugging/application/mle-grant-debug.md), its [SQLcl MCP fallback](apex/workspace-debugging/application/mle-privilege-fallback.md), and the [support-case handoff](apex/workspace-debugging/references/diagnostics/support-case-handoff.md).
 
 ## Scope Boundaries
 
@@ -96,7 +105,7 @@ Routine APEX administration is blocked for `SYS`, `SYSDBA`, `ISDBA = TRUE`, pars
 - Customer-specific reports require a user-confirmed output path before writing; prefer a location outside the repository unless the user explicitly selects another location. The Downloads rule satisfies the location requirement after the fresh `Ja` confirmation.
 - Substantive Workspace checks and state changes require a local protocol file outside the skill tree.
 - Live browser triage uses the separate redacted protocol described in `apex/workspace-debugging/references/diagnostics/live-browser-debugging.md`.
-- Protocols record scope, identity category, actions, observations, evidence references, handoffs, and final status while redacting secrets and sensitive payloads.
+- Use one redacted protocol per execution, with the local start date and time at the end of its filename, for example `apex-app107-seite301-YYYYMMDD-HHMMSS.md`. Update that file across diagnosis, handoffs, approval, repair, and verification; use a new file for a separate execution. Protocols record scope, identity category, actions, observations, evidence references, handoffs, and final status while redacting secrets and sensitive payloads.
 - Large artifacts remain local; responses use focused excerpts and compact summaries to reduce token usage.
 
 ## Supported Versions
@@ -117,6 +126,28 @@ apex/workspace-debugging/
 ```
 
 Load only the routed reference needed for the current task. Do not treat this README as a replacement for `apex/workspace-debugging/SKILL.md` or the routed references.
+
+## Support Case Handoff
+
+When an investigation stalls or the user requests an escalation summary, the
+skill can prepare a copy-ready, redacted support-case draft from the evidence
+already collected. It distinguishes verified facts, hypotheses, unknowns, and
+unperformed checks; includes reproduction steps and relevant changes; and asks
+for the specific support needed. It does not run additional checks just to fill
+the template or submit the case automatically. A separate skill-improvement
+feedback draft is available only when requested.
+
+Example prompt:
+
+```text
+I cannot make further progress with this APEX issue. Prepare a redacted support
+case from our investigation, including reproduction steps, evidence, completed
+checks and changes, and open questions. Show me the draft for review; do not
+submit it.
+```
+
+See [support-case-handoff.md](apex/workspace-debugging/references/diagnostics/support-case-handoff.md)
+for the draft structure and evidence boundaries.
 
 ## Demo Prompts
 
@@ -209,19 +240,43 @@ Schreibe ein redigiertes Protokoll nach .logs.
 <a href="docs/demo-3-dynamic-action.png"><img src="docs/demo-3-dynamic-action.png" alt="Demo 3: Dynamic Action in APEX Debug Bench" width="320"></a>
 
 ```text
-Nutze den Workspace-Debugging-Skill und beginne bei der geöffneten APEX Debug Bench App 107
-im VS-Code-Browser. Frage mich zuerst über die Auswahl nach der Umgebung: lokale
-Entwicklung, Test oder Produktion.
+Nutze den Workspace-Debugging-Skill und beginne bei der geöffneten APEX Debug Bench App 107 im VS-Code-Browser. Frage mich zuerst über die Auswahl nach der Umgebung: lokale Entwicklung, Test oder Produktion.
 
 Debugge den angezeigten Seitenfehler live. Prüfe, warum der betroffene Button
 oder die Aktualisierung des Seitenwerts nicht wie erwartet funktioniert. Nutze
 für die Analyse der Seitenkomponenten und Dynamic Action den APEXlang-Skill.
 
-Berichte den Befund und schlage die kleinste passende Behebung vor. Warte auf
-meine Freigabe, bevor du etwas änderst. Behebe danach die bestätigte Ursache,
-wiederhole den betroffenen Ablauf im APEX-Fenster und prüfe das Ergebnis.
+Berichte den Befund und schlage die kleinste passende Behebung vor. Warte auf meine Freigabe, bevor du etwas änderst. Behebe danach die bestätigte Ursache, wiederhole den betroffenen Ablauf im APEX-Fenster und prüfe das Ergebnis.
 Schreibe ein redigiertes Protokoll nach .logs.
 ```
+
+### Demo-Fehler wiederherstellen
+
+Die folgenden Schritte setzen die drei Fälle für eine erneute Demo zurück. Sie
+gelten für eine isolierte lokale Entwicklungsumgebung und ändern die installierte
+App 107 beziehungsweise die Rechte ihres ausführenden Schemas. Vor dem Zurücksetzen
+Umgebung, Schema und aktuellen Zustand prüfen; die Änderungen bewusst freigeben.
+
+1. **MLE-Rechte (Seite 301):** Die ausführende Identität und ihre wirksamen
+   MLE-Rechte mit dem DB-Skill über SQLcl-MCP prüfen. Für den vorbereiteten Fall
+   die oben unter Demo 1 aufgeführten direkten Grants `EXECUTE DYNAMIC MLE` und
+   `EXECUTE ON JAVASCRIPT` für das betreffende Schema durch eine entsprechend
+   berechtigte administrative Verbindung entziehen; die dort genannten
+   Voraussetzungen beachten. Über Rollen oder andere Wege erhaltene Rechte können
+   den Fehler weiterhin verhindern. Anschließend Seite 301 erneut ausführen und
+   prüfen, ob der erwartete Rechtefehler erscheint.
+2. **Fehlende Tabelle (Seite 302):** Im Page Designer der installierten App die
+   Tabellenreferenz in der betroffenen Diagrammserien-Abfrage von `GARMIN` auf
+   `GARMIN_MISSING_TABLE` ändern und speichern. Die tatsächliche Tabelle wird
+   dabei nicht umbenannt. Die Seite neu laden und den Fehler prüfen.
+3. **Dynamic Action (Seite 303):** In der Dynamic Action „Refresh Garmin Report“
+   die Aktion „Absichtlicher Dynamic-Action-Benchmark-Fehler“ wieder aktivieren:
+   die ausgeschlossene Build Option „Commented Out“ entfernen und speichern.
+   Seite 303 neu laden und „Activity Type Report“ ändern. Der Report sollte sich
+   aktualisieren und anschließend der absichtliche Fehler `ORA-20003` erscheinen.
+
+Die zurückgesetzten Fehler bleiben für die Demo aktiv, bis sie erneut behoben
+werden. Diese Schritte sind eine Anleitung und führen selbst keine Änderungen aus.
 
 ### Debugging Demo 4: APEX Benchmark Live Run
 Open http://127.0.0.1:28443 in your browser. This non-production playground uses ChangeMe_VSCode_12345 for all logins.
@@ -231,3 +286,38 @@ Ich bin nun auf der page 3 für den automatischen Benchmark Test. kannst du jetz
 
 # IMPORTANT TO READ
 I accept no liability for the use of this skill; it supports only officially supported Oracle APEX versions and invokes or uses only original, documented Oracle APEX functionality.
+
+## Implemented Diagnostic Cases and Skill Boundaries
+
+The following describes the workflows and diagnostic patterns implemented in this
+repository. A **triage** entry means the Workspace skill can collect and classify
+the permitted evidence independently; it does not guarantee that the root cause
+can be confirmed or fixed without another skill. Browser observations depend on
+the available tool's actual console and network capabilities. The patterns are
+hypotheses and routing guidance, not automated fixes or proof that every case has
+been tested end to end.
+
+| Case | What the Workspace skill can do without APEXlang or the DB skill | Can APEXlang also handle it? |
+| --- | --- | --- |
+| Page does not load, redirects, renders incorrectly, or a Builder page cannot be opened | Reproduce or observe in the existing signed-in browser; record the error and compare the available app, page, environment and working-copy context. Component, template and import investigation requires APEXlang. | **Partly.** APEXlang has runtime UI verification and component/import diagnostics; its UI workflow focuses on defects remaining after successful validate/import. |
+| Button, page item, Dynamic Action, report/grid refresh or AJAX fails | Observe the smallest safe interaction and capture visible results and available redacted request metadata. Item submission, action definitions, conditions and application changes require APEXlang. | **Yes, for application diagnosis and repair.** APEXlang covers Dynamic Actions and correlation of runtime errors with APEX debug logs. |
+| `JSON.WRITER.CLOSE_OBJECT`, empty chart or chart SQL error | Observe the chart and the visible/request symptom. Do not infer a missing table or the root cause from the message alone. The installed series and APEX Debug/Trace belong to APEXlang; database object or privilege checks belong to DB. | **Yes, for chart components and APEX debug analysis.** Database causes may also need DB. |
+| Browser JavaScript exception, blocked asset, CORS or mixed-content error | Capture the concise console message and redacted request metadata if the browser tool exposes them; classify the failing layer. Application code/assets, ORDS and network causes need the relevant owner. | **Partly.** APEXlang can investigate application code and has a separate runtime UI workflow; infrastructure remains outside its application scope. |
+| REST or external-call failure | Record the visible result and available redacted endpoint shape, status and timing. Application call configuration belongs to APEXlang; ORDS, ACL and infrastructure work belongs to DB or the responsible owner. | **Partly.** APEXlang can investigate the application call and correlated debug evidence; it does not replace infrastructure diagnosis. |
+| Slow page or application error | Use the appropriate Workspace dashboard or report to locate the affected page/time window, and collect available browser timing or visible error evidence. Those observations do not establish a SQL or component root cause. Live Workspace checks require the documented identity and access gates. | **Partly.** APEXlang handles application and APEX debug analysis; Workspace monitoring and database performance work have separate owners. |
+| Login, role or access differs between users | Record the visible symptom and user type; use the Workspace account and monitoring workflows for Workspace users/groups within their documented scope. Application authorization, database access and SSO belong to their respective owners. | **Partly.** APEXlang can investigate application authorization and components; it does not replace Workspace user administration or identity-provider investigation. |
+| `ORA-01031` creating an MLE module or environment | Independently perform browser triage. If the DB skill is unavailable, the narrowly scoped SQLcl MCP fallback can check relevant creation privileges and, only when the missing right, recipient and target are verified and repair is authorized, apply the minimal grant and verify it. The fallback requires SQLcl MCP and database access; it is not an offline workflow. | **Partly.** APEXlang can investigate import/application and debug evidence; privilege diagnosis and grants belong to DB, or to this specific creation fallback when DB is unavailable. |
+| `ORA-01031` executing MLE or dynamic JavaScript | Observe the failure and identify the visible operation. Effective execution privileges and grants require DB; the creation fallback does **not** cover runtime or dynamic MLE. | **Partly.** APEXlang can identify the application action and debug evidence; execution privilege work belongs to DB. |
+| `ORA-00942`, object access or definer-rights failure | Capture the visible error and context. Determining object resolution, effective identity, synonyms and access requires DB; source and debug analysis requires APEXlang. | **Partly.** APEXlang can identify the component and SQL from debug evidence; database object and privilege checks belong to DB. |
+| Checksum/session-state protection, incomplete Supporting Objects, export/installed-app mismatch or version incompatibility | Capture visible symptoms and target context and route the case. Do not disable security, retry installation, or infer a source-level defect from browser evidence alone. | **Yes, for the corresponding application, import and validation analysis.** Database and infrastructure causes may need DB. |
+
+**Live debugging overlap:** This Workspace skill provides a general live-browser
+triage workflow for an existing authenticated session, including the VS Code
+embedded browser fallback, evidence redaction and handoff. The inspected
+APEXlang skill also documents live runtime UI verification: opening a page,
+capturing a snapshot, interacting with controls and retesting after a fix. It
+also documents `APEX_DEBUG_MESSAGES` analysis. Therefore live browser work is
+not exclusive to this skill; the workflows have different entry points and
+overlap for runtime UI behavior. See [live browser debugging](apex/workspace-debugging/references/diagnostics/live-browser-debugging.md),
+the [triage matrix](apex/workspace-debugging/application/triage-matrix.md) and
+the [diagnostic patterns](apex/workspace-debugging/application/diagnostic-patterns.md).

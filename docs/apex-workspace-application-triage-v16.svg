@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="1050" viewBox="0 0 1200 1050" role="img" aria-labelledby="title desc">
+  <title id="title">APEX Application and Workspace Triage V16</title>
+  <desc id="desc">One-page guide to live triage, diagnosis, ownership, support-case handoff and safety.</desc>
+  <rect width="1200" height="1050" fill="#f4f7fb"/>
+  <rect width="1200" height="150" fill="#15304e"/>
+  <text x="60" y="68" fill="#ffffff" font-family="Arial, sans-serif" font-size="37" font-weight="700">APEX Application &amp; Workspace Triage</text>
+  <text x="60" y="110" fill="#b5cfe2" font-family="Arial, sans-serif" font-size="22">Live evidence · responsible handoffs · support-ready findings</text>
+  <text x="1110" y="110" fill="#b5cfe2" font-family="Arial, sans-serif" font-size="22" text-anchor="end">V16</text>
+  <g font-family="Arial, sans-serif">
+    <rect x="45" y="180" width="540" height="205" rx="18" fill="#ffffff" stroke="#d8e1eb"/>
+    <text x="75" y="225" fill="#146c83" font-size="26" font-weight="700">1  LIVE TRIAGE</text>
+    <text x="75" y="268" fill="#263a4c" font-size="20">Confirm environment and target when known.</text>
+    <text x="75" y="304" fill="#263a4c" font-size="20">Reproduce in the signed-in browser.</text>
+    <text x="75" y="340" fill="#263a4c" font-size="20">Keep one redacted, timestamped protocol.</text>
+    <rect x="615" y="180" width="540" height="205" rx="18" fill="#ffffff" stroke="#d8e1eb"/>
+    <text x="645" y="225" fill="#146c83" font-size="26" font-weight="700">2  DIAGNOSE &amp; VERIFY</text>
+    <text x="645" y="268" fill="#263a4c" font-size="20">Classify the layer and collect minimal evidence.</text>
+    <text x="645" y="304" fill="#263a4c" font-size="20">For MLE, start with the selected schema identity.</text>
+    <text x="645" y="340" fill="#263a4c" font-size="20">Apply authorized fixes and verify the result.</text>
+    <rect x="45" y="410" width="1110" height="198" rx="18" fill="#ffffff" stroke="#d8e1eb"/>
+    <text x="75" y="455" fill="#146c83" font-size="26" font-weight="700">3  ROUTE BY OWNER</text>
+    <text x="75" y="498" fill="#263a4c" font-size="20"><tspan font-weight="700">APEXlang skill:</tspan> application components, source, Debug/Trace and imports</text>
+    <text x="75" y="534" fill="#263a4c" font-size="20"><tspan font-weight="700">DB skill:</tspan> SQL, privileges, MLE, ORDS and infrastructure</text>
+    <text x="75" y="570" fill="#263a4c" font-size="20"><tspan font-weight="700">Workspace:</tspan> users, mappings, services and monitoring  ·  <tspan font-weight="700">MLE fallback:</tspan> creation only</text>
+    <rect x="45" y="633" width="1110" height="145" rx="18" fill="#ffffff" stroke="#d8e1eb"/>
+    <text x="75" y="676" fill="#9a5634" font-size="25" font-weight="700">SAFETY &amp; EVIDENCE</text>
+    <text x="75" y="714" fill="#263a4c" font-size="19">A missing grant alone does not prove the cause. Protect credentials, session IDs and payloads.</text>
+    <text x="75" y="747" fill="#263a4c" font-size="19">Follow environment, identity and authorization gates. Check the active APEX release.</text>
+    <rect x="45" y="803" width="1110" height="120" rx="18" fill="#e4f3f3" stroke="#a5d3d1"/>
+    <text x="75" y="844" fill="#116562" font-size="22" font-weight="700">SUPPORT CASE HANDOFF</text>
+    <text x="75" y="882" fill="#263a4c" font-size="19">On request, prepare a redacted support-case draft for review; do not send it automatically.</text>
+  </g>
+</svg>
